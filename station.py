@@ -30,7 +30,7 @@ class StationList:
         self.load()
 
     def load(self):
-        self.stations = [s for s in Station.objects]
+        self.stations = Station.objects
 
     def save(self):
         response = self.session.get(self.url)
@@ -42,6 +42,14 @@ class StationList:
             if len(data) < 8:
                 continue
 
+            if len(data[3]) != 3:
+                continue
+
+            if data[0].endswith('London'):
+                data[0] = data[0][:len(data[0]) - len('London')]
+            if data[0].endswith(']'):
+                end = data[0].rfind('[')
+                data[0] = data[0][:end]
             Station(name=data[0], location=data[7], code=data[3]).save()
 
 
