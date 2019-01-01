@@ -33,7 +33,7 @@ class TimeResults:
 
 
 class Parser:
-    def __init__(self, stations, time_range=['0730', '0745', '0800', '0815', '0830'], date='220518'):
+    def __init__(self, stations, time_range=['0730', '0745', '0800', '0815', '0830'], date='130319'):
         self.stations = stations
         self.time_range = time_range
         self.date = date
@@ -59,8 +59,11 @@ class Parser:
 
 
 if __name__ == '__main__':
-    stations = filter(lambda x: x.name in ['London Bridge', 'Cannon Street'], StationList().stations)
-    parser = Parser(stations)
+    stations = filter(lambda x: x.name in ['London Bridge',
+                                           'Cannon Street',
+                                           'Blackfriars',
+                                           'City Thameslink'], StationList().stations)
+    parser = Parser([x for x in stations])
     parser.run()
 
 

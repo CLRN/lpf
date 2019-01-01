@@ -30,7 +30,7 @@ class StationList:
         self.load()
 
     def load(self):
-        self.stations = Station.objects
+        self.stations = [x for x in Station.objects]
 
     def save(self):
         response = self.session.get(self.url)
