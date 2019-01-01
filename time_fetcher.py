@@ -61,7 +61,6 @@ class Parser:
 if __name__ == '__main__':
     stations = filter(lambda x: x.name in ['London Bridge',
                                            'Cannon Street',
-                                           'Blackfriars',
                                            'City Thameslink'], StationList().stations)
     parser = Parser([x for x in stations])
     parser.run()

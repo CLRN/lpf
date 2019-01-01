@@ -1,5 +1,6 @@
 from requests_html import HTMLSession
-from mongoengine import Document, connect, StringField
+from mongoengine import Document, connect, StringField, IntField
+import string
 
 connect("lpf")
 
@@ -8,6 +9,13 @@ class Station(Document):
     name = StringField(required=True)
     location = StringField()
     code = StringField(required=True)
+    avg_price = IntField()
+
+    def parse_location(self):
+        input = ''.join(filter(lambda x: x in string.printable, self.location))
+        input = [s.strip() for s in input.split('/')][-1]
+        parts = [s.strip().strip(';') for s in input.split(' ')]
+        return float(parts[0]), float(parts[1])
 
     def __repr__(self):
         return "[{}] {}".format(self.code, self.name)

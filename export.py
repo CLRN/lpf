@@ -1,13 +1,8 @@
 from journey import Journey
+from station import Station
 import csv
-import string
 
-
-def parse_location(input):
-    input = ''.join(filter(lambda x: x in string.printable, input))
-    input = [s.strip() for s in input.split('/')][-1]
-    parts = [s.strip().strip(';') for s in input.split(' ')]
-    return float(parts[0]), float(parts[1])
+dst = Station.objects(name='City Thameslink')[0]
 
 
 with open('export.csv', 'w') as csvfile:
@@ -16,8 +11,8 @@ with open('export.csv', 'w') as csvfile:
 
     writer.writeheader()
 
-    for j in Journey.objects(best__lte=60, best__gt=50).order_by('best'):
-        latitude, longitude = parse_location(j.src.location)
+    for j in Journey.objects(best__lte=20, best__gt=10).order_by('best'):
+        latitude, longitude = j.src.parse_location()
 
         writer.writerow({'name': '[{}] {}'.format(j.best, j.src.name),
                          'code': j.src.code,
