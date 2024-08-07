@@ -1,3 +1,4 @@
+lxml[html_clean]
 mongoengine
 pandas
 requests

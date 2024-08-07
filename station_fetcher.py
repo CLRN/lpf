@@ -21,12 +21,12 @@ def load() -> pd.DataFrame:
         title = [line for line in lines if line.find("title") != -1][0]
 
         parts = where.split(" ")
-        parts = ["".join([c for c in s if c == "." or c.isdigit()]) for s in parts]
+        parts = ["".join([c for c in s if c in ".-" or c.isdigit()]) for s in parts]
         lat, lng = list(map(float, filter(str, parts)))
 
         station = title.split("'")[1]
-        beg = station.find("(")
-        end = station.find(")")
+        beg = station.rfind("(")
+        end = station.rfind(")")
         code = station[beg + 1 : end]
         station = station[: beg - 1]
 
