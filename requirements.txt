@@ -1,7 +1,5 @@
-lxml[html_clean]
 mongoengine
 pandas
 pgeocode
 requests
-requests-html
 zoopla

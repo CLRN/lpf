@@ -1,4 +1,3 @@
-from datetime import datetime
 from functools import partial
 
 import numpy as np
@@ -6,7 +5,6 @@ import pandas as pd
 import requests
 from dateutil.parser import parse as parse_dt
 from parse import logging
-from requests_html import HTMLSession
 
 
 # vectorized haversine function
@@ -28,47 +26,11 @@ def haversine(lat1, lon1, lat2, lon2, to_radians=True, earth_radius=6371):
     return earth_radius * 2 * np.arcsin(np.sqrt(a))
 
 
-class TimeResults:
-    def __init__(self, pages):
-        self.pages = pages
-
-    def diff(self, dep, arr):
-        return int((datetime.strptime(arr, "%H:%M") - datetime.strptime(dep, "%H:%M")).total_seconds() / 60)
-
-    def get_best(self):
-        fastest = 180
-        departure_time = ""
-
-        for page in self.pages:
-            for row in page.html.find("tr"):
-                data = [r.strip() for r in row.text.split("\n")]
-                if len(data) < 6:
-                    continue
-
-                try:
-                    diff = self.diff(data[0], data[3])
-                    if diff < fastest:
-                        fastest = diff
-                        departure_time = data[0]
-                except:
-                    pass
-
-        return fastest, departure_time
-
-
 class Parser:
-    def __init__(
-        self, src: str, distance: float = 100, time_range=["0730", "0745", "0800", "0815", "0830"], date="130319"
-    ):
-        self.destination = src
+    def __init__(self, destination: str, distance: float = 100, time: str = "2024-08-08T08:00:00+01:00"):
+        self.destination = destination
         self.max_distace = distance
-        self.time_range = time_range
-        self.date = date
-        self.url_pattern = "http://ojp.nationalrail.co.uk/service/timesandfares/{}/{}/{}/{}/dep"
-        self.session = HTMLSession()
-
-    def make_url(self, src, dst, time_start):
-        return self.url_pattern.format(src, dst, self.date, time_start)
+        self.time = time
 
     def _distance(self, from_lat, from_lng, row):
         return haversine(from_lat, from_lng, row["lat"], row["lng"])
@@ -91,7 +53,7 @@ class Parser:
                     json={
                         "origin": {"crs": src, "group": False},
                         "destination": {"crs": self.destination, "group": False},
-                        "outwardTime": {"travelTime": "2024-08-08T08:00:00+01:00", "type": "DEPART"},
+                        "outwardTime": {"travelTime": self.time, "type": "DEPART"},
                         "fareRequestDetails": {
                             "passengers": {"adult": 1, "child": 0},
                             "fareClass": "ANY",
