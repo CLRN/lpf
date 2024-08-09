@@ -2,4 +2,5 @@ mongoengine
 pandas
 pgeocode
 requests
+scipy
 zoopla
