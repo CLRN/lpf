@@ -21,7 +21,8 @@ def process_geo():
 
     # TALLPPE_ACAD_1618 - avg score
     # PTAAB_2FAC - The percentage of A-Level students achieving at least three levels at grades AAB or better
-    subset = df[["SCHNAME", "GEND1618", "PCODE", "lat", "lng", "TALLPPE_ACAD_1618", "PTAAB_2FAC"]]
+    df["private"] = df["NFTYPE/FESITYPE"] == "IND"
+    subset = df[["SCHNAME", "GEND1618", "PCODE", "lat", "lng", "TALLPPE_ACAD_1618", "PTAAB_2FAC", "private"]]
     subset.to_csv("./data/schools.csv")
 
 

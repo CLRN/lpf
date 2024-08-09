@@ -31,7 +31,7 @@ def process_prices():
     results = list()
     for idx in range(len(stations)):
         coord = (lats.iloc[idx], lngs.iloc[idx])
-        res = tree.query(coord, k=100, distance_upper_bound=0.1)
+        res = tree.query(coord, k=100, distance_upper_bound=0.1) # 0.1 is 10km
 
         avg = list()
         for i, keyidx in enumerate(res[1]):
